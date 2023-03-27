@@ -30,19 +30,16 @@ jobs:
 
     - name: Generate CMake Projects
       working-directory: ${{runner.workspace}}
-      shell: cmd
       run: |
         cmake -S Tolk -B build -A ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_TOOLCHAIN_FILE=../tolk/CMake/mingwcc64.toolchain.cmake
 
     - name: Build CMake Projects
       working-directory: ${{runner.workspace}}
-      shell: cmd
       run: |
         cmake --build build
 
     - name: Install CMake Projects
       working-directory: ${{runner.workspace}}
-      shell: cmd
       run: |
         cmake --build build --target install
 
