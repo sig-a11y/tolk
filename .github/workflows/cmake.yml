@@ -19,6 +19,9 @@ jobs:
           - name: VS2019-x64
             vmimage: windows-2019
             cmakeplatform: x64
+          - name: Mingw-w64-x64
+            vmimage: ubuntu-20.04
+            cmakeplatform: x64
 
     runs-on: ${{ matrix.vmimage }}
     name: ${{ matrix.name }}
