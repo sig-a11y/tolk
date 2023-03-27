@@ -48,5 +48,5 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: tolk-binaries-${{ matrix.cmakeplatform }}
+        name: tolk-${{ matrix.name }}
         path: ${{runner.workspace}}/install
