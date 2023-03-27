@@ -15,13 +15,13 @@ jobs:
         include:
           - name: VS2019-x86
             vmimage: windows-2019
-            cmakeplatform: Win32
+            cmakeplatform: -A Win32
           - name: VS2019-x64
             vmimage: windows-2019
-            cmakeplatform: x64
+            cmakeplatform: -A x64
           - name: Mingw-w64-x64
             vmimage: ubuntu-20.04
-            cmakeplatform: x64
+            cmakeplatform:
 
     runs-on: ${{ matrix.vmimage }}
     name: ${{ matrix.name }}
@@ -31,7 +31,7 @@ jobs:
     - name: Generate CMake Projects
       working-directory: ${{runner.workspace}}
       run: |
-        cmake -S tolk -B build -A ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_TOOLCHAIN_FILE=../tolk/CMake/mingwcc64.toolchain.cmake
+        cmake -S tolk -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_TOOLCHAIN_FILE=../tolk/CMake/mingwcc64.toolchain.cmake
 
     - name: Build CMake Projects
       working-directory: ${{runner.workspace}}
