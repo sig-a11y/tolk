@@ -26,7 +26,7 @@ public:
   bool Output(const wchar_t *str, bool interrupt);
 
 private:
-  typedef int (WINAPI *ZDSRInitTTS)(int channelType, const wchar_t* channelName, , BOOL bKeyDownInterrupt);
+  typedef int (WINAPI *ZDSRInitTTS)(int channelType, const wchar_t* channelName, BOOL bKeyDownInterrupt);
   typedef int (WINAPI *ZDSRGetSpeakState)();
   typedef int (WINAPI *ZDSRSpeak)(const wchar_t* text, BOOL bInterrupt);
   typedef void (WINAPI *ZDSRStopSpeak)();
