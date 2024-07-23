@@ -9,7 +9,7 @@ RFLAGS = /nologo
 SYSLIBS = User32.Lib Ole32.Lib OleAut32.Lib
 
 SOURCES = Tolk.cpp TolkJNI.cpp \
-	ScreenReaderDriverJAWS.cpp ScreenReaderDriverNVDA.cpp \
+	ScreenReaderDriverBOY.cpp ScreenReaderDriverJAWS.cpp ScreenReaderDriverNVDA.cpp \
 	ScreenReaderDriverSA.cpp ScreenReaderDriverSNova.cpp \
 	ScreenReaderDriverWE.cpp ScreenReaderDriverZDSR.cpp \
 	ScreenReaderDriverZT.cpp ScreenReaderDriverSAPI.cpp \

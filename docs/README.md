@@ -83,10 +83,11 @@ Take a look at the `examples` directory to get started. This directory contains 
 The following table lists the supported screen readers in the order in which they are auto-detected.
 
     Screen Reader   Speech   Braille   Status   x86   x64
-    JAWS            Yes      Yes       No       Yes   Yes
-    Window-Eyes     Yes      Yes       No       Yes   Yes
-    NVDA            Yes      Yes       No       Yes   Yes
     ZDSR            Yes      NO       YES       Yes   Yes
+    BoyPCReader            Yes      NO       YES       Yes   Yes
+    JAWS            Yes      Yes       No       Yes   Yes
+    NVDA            Yes      Yes       No       Yes   Yes
+    Window-Eyes     Yes      Yes       No       Yes   Yes
     SuperNova       Yes      No        No       Yes   No
     System Access   Yes      Yes       No       Yes   Yes
     ZoomText        Yes      No        Yes      Yes   Yes
