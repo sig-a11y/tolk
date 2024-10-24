@@ -2,13 +2,13 @@
 
 [![Windows](https://github.com/game-a11y/tolk/actions/workflows/cmake.yml/badge.svg)](https://github.com/game-a11y/tolk/actions/workflows/cmake.yml)
 
-* Project page: https://davykager.com/projects/tolk/ (This URL is broken!) [[web.archive]](https://web.archive.org/web/20190824230209/http://davykager.com/projects/tolk/)
+* Project page: `https://davykager.com/projects/tolk/` (This URL is broken!) [[web.archive]](https://web.archive.org/web/20190824230209/http://davykager.com/projects/tolk/)
 
 
 ## Related project
 
 - [C++, Windows-Only] [qtnc/UniversalSpeech](https://github.com/qtnc/UniversalSpeech)  
-    UniversalSpeech ibrary: make popular screen readers speak in your application
+    UniversalSpeech library: make popular screen readers speak in your application
 - [Rust, Cross-platforms] [AccessKit/accesskit](https://github.com/AccessKit/accesskit)  
     UI accessibility infrastructure across platforms and programming languages
 
