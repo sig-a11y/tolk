@@ -37,7 +37,8 @@ ScreenReaderDriverZDSR::~ScreenReaderDriverZDSR() {
 }
 
 bool ScreenReaderDriverZDSR::Speak(const wchar_t *str, bool interrupt) {
-  return (zdsrSpeak(str, interrupt) == 0);
+  if (  zdsrSpeak) return (zdsrSpeak(str, interrupt) == 0);
+  return false;
 }
 
 bool ScreenReaderDriverZDSR::Braille(const wchar_t *str) {
@@ -45,20 +46,24 @@ bool ScreenReaderDriverZDSR::Braille(const wchar_t *str) {
 }
 
 bool ScreenReaderDriverZDSR::Silence() {
-  zdsrStopSpeak();
-  return true;
+  if (zdsrStopSpeak) {
+    zdsrStopSpeak();
+   return true;
+  }
+  return false;
 }
 
 bool ScreenReaderDriverZDSR::IsSpeaking() {
-  return (zdsrGetSpeakState() == 3);
+  if (zdsrGetSpeakState) return (zdsrGetSpeakState() == 3);
+  return false;
 }
 
 bool ScreenReaderDriverZDSR::IsActive() {
-  return (zdsrGetSpeakState() >= 3);
+  if (  zdsrGetSpeakState) return (zdsrGetSpeakState() >= 3);
+  return false;
 }
 
 bool ScreenReaderDriverZDSR::Output(const wchar_t *str, bool interrupt) {
-  // Beware short-circuiting.
   const bool speak = Speak(str, interrupt);
   const bool braille = Braille(str);
   return (speak || braille);
