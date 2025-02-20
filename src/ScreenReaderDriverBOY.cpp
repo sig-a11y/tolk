@@ -52,7 +52,8 @@ FreeLibrary(controller);
 
 bool ScreenReaderDriverBOY::Speak(const wchar_t *str, bool interrupt) {
   g_speakCompleteReason = -1; // Reset the reason to indicate speaking has started
-  return (BoySpeak(str, true, !interrupt, true, SpeakCompleteCallback) == 0);
+  if (BoySpeak) return (BoySpeak(str, true, !interrupt, true, SpeakCompleteCallback) == 0);
+  return false;
 }
 
 bool ScreenReaderDriverBOY::Braille(const wchar_t *str) {
@@ -60,9 +61,12 @@ bool ScreenReaderDriverBOY::Braille(const wchar_t *str) {
 }
 
 bool ScreenReaderDriverBOY::Silence() {
-  BoyStopSpeak(true);
-  g_speakCompleteReason = 3;
-  return true;
+  if (BoyStopSpeak) {
+    BoyStopSpeak(true);
+    g_speakCompleteReason = 3;
+    return true;
+  }
+  return false;
 }
 
 bool ScreenReaderDriverBOY::IsSpeaking() {
@@ -70,11 +74,11 @@ bool ScreenReaderDriverBOY::IsSpeaking() {
 }
 
 bool ScreenReaderDriverBOY::IsActive() {
-  return BoyIsRunning();
+  if (BoyIsRunning) return BoyIsRunning();
+  return false;
 }
 
 bool ScreenReaderDriverBOY::Output(const wchar_t *str, bool interrupt) {
-  // Beware short-circuiting.
   const bool speak = Speak(str, interrupt);
   const bool braille = Braille(str);
   return (speak || braille);
