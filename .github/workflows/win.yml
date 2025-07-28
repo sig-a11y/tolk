@@ -51,7 +51,7 @@ jobs:
       run: |
         cmake --build build --target install
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: tolk-${{ matrix.name }}
         path: ${{runner.workspace}}/install
