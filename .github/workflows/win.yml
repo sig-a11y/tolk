@@ -42,11 +42,11 @@ jobs:
 
     - name: Build CMake Projects
       run: |
-        cmake --build build
+        cmake --build build --config RelWithDebugInfo
 
     - name: Install CMake Projects
       run: |
-        cmake --build build --target install
+        cmake --install build --config RelWithDebugInfo
 
     - uses: actions/upload-artifact@v4
       with:
