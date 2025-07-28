@@ -1,4 +1,4 @@
-name: CMake
+name: Win
 
 on:
   push:
@@ -30,23 +30,16 @@ jobs:
           - name: VS2022-x64
             vmimage: windows-2022
             cmakeplatform: -A x64
-          - name: Mingw-w64-x64
-            vmimage: ubuntu-latest
-            cmakeplatform:
 
     runs-on: ${{ matrix.vmimage }}
     name: ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up MinGW
-      if: ${{ 'ubuntu-latest' == matrix.vmimage }}
-      uses: egor-tensin/setup-mingw@v2
-
     - name: Generate CMake Projects
       working-directory: ${{runner.workspace}}
       run: |
-        cmake -S tolk -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_TOOLCHAIN_FILE=../tolk/CMake/mingwcc64.toolchain.cmake
+        cmake -S tolk -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
 
     - name: Build CMake Projects
       working-directory: ${{runner.workspace}}
