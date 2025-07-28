@@ -37,21 +37,18 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Generate CMake Projects
-      working-directory: ${{runner.workspace}}
       run: |
-        cmake -S tolk -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
+        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
 
     - name: Build CMake Projects
-      working-directory: ${{runner.workspace}}
       run: |
         cmake --build build
 
     - name: Install CMake Projects
-      working-directory: ${{runner.workspace}}
       run: |
         cmake --build build --target install
 
     - uses: actions/upload-artifact@v4
       with:
         name: tolk-${{ matrix.name }}
-        path: ${{runner.workspace}}/install
+        path: install
