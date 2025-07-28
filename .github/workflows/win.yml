@@ -38,7 +38,7 @@ jobs:
 
     - name: Generate CMake Projects
       run: |
-        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
+        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
     - name: Build CMake Projects
       run: |
