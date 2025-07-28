@@ -38,15 +38,15 @@ jobs:
 
     - name: Generate CMake Projects
       run: |
-        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
 
     - name: Build CMake Projects
       run: |
-        cmake --build build --config RelWithDebugInfo
+        cmake --build build --config Release
 
     - name: Install CMake Projects
       run: |
-        cmake --install build --config RelWithDebugInfo
+        cmake --install build --config Release
 
     - uses: actions/upload-artifact@v4
       with:
