@@ -1,0 +1,54 @@
+name: Win
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # dirs
+      - '.github/**/*.yml'
+      - 'CMake/*.cmake'
+      # TODO: set ci for those
+      # - 'contrib/**'
+      - 'libs/**/*.dll'
+      - 'src/**'
+      # top-level files
+      - 'CMakeLists.txt'
+      - 'Makefile'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  msvc:
+    strategy:
+      matrix:
+        include:
+          - name: VS2022-x86
+            vmimage: windows-2022
+            cmakeplatform: -A Win32
+          - name: VS2022-x64
+            vmimage: windows-2022
+            cmakeplatform: -A x64
+
+    runs-on: ${{ matrix.vmimage }}
+    name: ${{ matrix.name }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Generate CMake Projects
+      run: |
+        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
+
+    - name: Build CMake Projects
+      run: |
+        cmake --build build --config Release
+
+    - name: Install CMake Projects
+      run: |
+        cmake --install build --config Release
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: tolk-${{ matrix.name }}
+        path: install
