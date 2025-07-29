@@ -14,7 +14,6 @@ on:
       - 'src/**'
       # top-level files
       - 'CMakeLists.txt'
-      - 'Makefile'
   pull_request:
     branches:
       - main
@@ -24,31 +23,28 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: VS2022-x86
-            vmimage: windows-2022
-            cmakeplatform: -A Win32
-          - name: VS2022-x64
-            vmimage: windows-2022
-            cmakeplatform: -A x64
+          - platform: x64
+            config: Release
+          # - platform: x64
+          #   config: Debug
+          # - platform: x64
+          #   config: RelWithDebugInfo
+          - platform: Win32
+            config: Release
 
-    runs-on: ${{ matrix.vmimage }}
-    name: ${{ matrix.name }}
+    runs-on: windows-2022
+    name: ${{ matrix.platform }}-${{ matrix.config }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Generate CMake Projects
-      run: |
-        cmake -S . -B build ${{ matrix.cmakeplatform }} -DCMAKE_INSTALL_PREFIX=install
-
-    - name: Build CMake Projects
-      run: |
-        cmake --build build --config Release
-
-    - name: Install CMake Projects
-      run: |
-        cmake --install build --config Release
+    - name: Generate
+      run: cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
+    - name: Build
+      run: cmake --build build --config ${{ matrix.config }}
+    - name: Install
+      run: cmake --install build --config ${{ matrix.config }}
 
     - uses: actions/upload-artifact@v4
       with:
-        name: tolk-${{ matrix.name }}
-        path: install
+        name: tolk-${{ matrix.platform }}-${{ matrix.config }}-DEV
+        path: install/
