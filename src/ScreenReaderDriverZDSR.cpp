@@ -28,8 +28,7 @@ ScreenReaderDriverZDSR::ScreenReaderDriverZDSR() :
     zdsrGetSpeakState = (ZDSRGetSpeakState)GetProcAddress(controller, "GetSpeakState");
     zdsrSpeak = (ZDSRSpeak)GetProcAddress(controller, "Speak");
     zdsrStopSpeak = (ZDSRStopSpeak)GetProcAddress(controller, "StopSpeak");
-
-	  zdsrInitTTS(0, NULL);
+	zdsrInitTTS(0, NULL, true);
   }
 }
 
@@ -38,13 +37,20 @@ ScreenReaderDriverZDSR::~ScreenReaderDriverZDSR() {
 }
 
 bool ScreenReaderDriverZDSR::Speak(const wchar_t *str, bool interrupt) {
-  if (zdsrSpeak) return (zdsrSpeak(str, interrupt) == 0);
+  if (  zdsrSpeak) return (zdsrSpeak(str, interrupt) == 0);
+  return false;
+}
+
+bool ScreenReaderDriverZDSR::Braille(const wchar_t *str) {
   return false;
 }
 
 bool ScreenReaderDriverZDSR::Silence() {
-  if (zdsrStopSpeak) zdsrStopSpeak();
-  return true;
+  if (zdsrStopSpeak) {
+    zdsrStopSpeak();
+   return true;
+  }
+  return false;
 }
 
 bool ScreenReaderDriverZDSR::IsSpeaking() {
@@ -53,13 +59,12 @@ bool ScreenReaderDriverZDSR::IsSpeaking() {
 }
 
 bool ScreenReaderDriverZDSR::IsActive() {
-  if (zdsrGetSpeakState) return (zdsrGetSpeakState() >= 3);
+  if (  zdsrGetSpeakState) return (zdsrGetSpeakState() >= 3);
   return false;
 }
 
 bool ScreenReaderDriverZDSR::Output(const wchar_t *str, bool interrupt) {
-  // Beware short-circuiting.
-  const bool speak = zdsrSpeak(str, interrupt);
+  const bool speak = Speak(str, interrupt);
   const bool braille = Braille(str);
   return (speak || braille);
 }
