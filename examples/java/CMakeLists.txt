@@ -72,7 +72,8 @@ set(RUN_SCRIPT ${EXAMPLE_OUTPUT_DIR}/run_example.bat)
 file(WRITE ${RUN_SCRIPT} 
 "@echo off\n"
 "echo Running Tolk Java Example...\n"
-"java -Djava.library.path=../../lib -jar ExampleAppJava.jar\n"
+"cd ../../lib\n"
+"java -Djava.library.path=. -jar ../examples/java/ExampleAppJava.jar\n"
 "pause\n"
 )
 
