@@ -6,14 +6,33 @@ If you want to compile Tolk yourself, here's what you need to build the whole th
 
 * Microsoft Visual C++
 * Windows Software Development Kit (SDK)
-* Java Development Kit (JDK)
-* Microsoft .NET Framework
-* Python
-* Pandoc
+* (Optional) Java Development Kit (JDK)
+* (Optional) Microsoft .NET Framework
+* (Optional) Pandoc, for doc
 
-The root directory and `examples` directories contain various batch files as a starting point. They assume the required tools are in your `PATH` and that the JDK include directory is in `INCLUDE`. For the examples you will also need to copy over any dependency files.
+The root directory and `examples` directories contain various batch files as a starting point.
+They assume the required tools are in your `PATH` and that the JDK include directory is in `INCLUDE`.
+For the examples you will also need to copy over any dependency files.
 
-## Generate the `.dll`
+## Build with CMake
+
+Open the **Developer Powershell for VS:
+
+```powershell
+# x64; with examples; with dotnet, java
+cmake -S . -B build -A x64 -DBUILD_EXAMPLES=ON -DTOLK_WITH_DOENET=ON -DTOLK_WITH_JAVAJNI=ON
+cmake --build build --config RelWithDebInfo
+cmake --install build --config RelWithDebInfo --prefix tolk-RelWithDebInfo-x64
+
+# Win32; with examples; with dotnet, java
+cmake -S . -B build32 -A Win32 -DBUILD_EXAMPLES=ON -DTOLK_WITH_DOENET=ON -DTOLK_WITH_JAVAJNI=ON
+cmake --build build32 --config RelWithDebInfo
+cmake --install build32 --config RelWithDebInfo --prefix tolk-RelWithDebInfo-Win32
+```
+
+See [workflows](.github/workflows) dir for more examples.
+
+## (Old) Build with Makefile
 
 1. Install the dependencies:
 
