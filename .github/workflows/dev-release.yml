@@ -48,9 +48,9 @@ jobs:
           - os: windows-2022
             platform: x64
             config: Release
-          # - os: windows-2022
-          #   platform: Win32
-          #   config: Release
+          - os: windows-2022
+            platform: Win32
+            config: Release
 
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.platform }}-${{ matrix.config }}
