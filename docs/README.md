@@ -39,11 +39,6 @@ There are APIs for the following languages:
 * AutoIt
 * PureBasic
 
-## License
-
-Tolk is distributed under the GNU Lesser General Public License version 3 (LGPLv3).
-Client libraries and headers are distributed under their own license.
-
 ## Design
 
 The key components of Tolk are the screen reader drivers. They wrap a specific screen reader API into an abstract interface which is then used by Tolk's auto-detection mechanism. SAPI, albeit not a screen reader, also has its own driver. To keep things simple and secure, these screen reader drivers are not exposed to client code.
@@ -124,10 +119,18 @@ The following table lists the supported screen readers in the order in which the
 * The driver for Microsoft SAPI explicitly disables XML handling because there is no way to be sure SAPI is being used and other drivers don't support this.
 * Window-Eyes is obsolete, but support has not yet been removed.
 
-## Contributors
+## License
+
+Tolk is distributed under the GNU Lesser General Public License version 3 ([LGPLv3](LICENSE.txt)).  
+Client libraries and headers are distributed under their own license.
+
+* NVDA: [LGPL-2.1](LICENSE-NVDA.txt)
+
+### Contributors
+
+[Contributors to sig-a11y/tolk](https://github.com/sig-a11y/tolk/graphs/contributors)
 
 * Davy Kager
 * Leonard de Ruijter
 * Axel Vugts
-* QuentinC, who has developed [Universal Speech](https://github.com/qtnc/UniversalSpeech), another great screen reader library
-* [Other Contributors](https://github.com/sig-a11y/tolk/graphs/contributors) 
+* QuentinC, who has developed [Universal Speech](https://github.com/QuentinC-Github/UniversalSpeech), another great screen reader library
