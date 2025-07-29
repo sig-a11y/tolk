@@ -48,9 +48,9 @@ jobs:
           - os: windows-2022
             platform: x64
             config: Release
-          - os: windows-2022
-            platform: Win32
-            config: Release
+          # - os: windows-2022
+          #   platform: Win32
+          #   config: Release
 
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.platform }}-${{ matrix.config }}
@@ -60,6 +60,9 @@ jobs:
     - name: Set Environment Variable
       run: |
         echo "JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}" >> $GITHUB_ENV
+    - name: Echo Env
+      run: |
+        echo "JOB_NAME=${{ env.JOB_NAME }}"
 
     - name: Generate CMake Projects
       run: |
