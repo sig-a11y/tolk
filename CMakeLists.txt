@@ -59,6 +59,8 @@ install (FILES docs/README.md DESTINATION docs)
 install (FILES LICENSE.txt LICENSE-NVDA.txt DESTINATION license)
 # add Binay DLL
 install (TARGETS Tolk DESTINATION lib)
+# Install PDB files for Debug builds
+install (FILES $<TARGET_PDB_FILE:Tolk> DESTINATION lib OPTIONAL)
 # add header file
 install (FILES src/Tolk.h DESTINATION include)
 # add Client libraries
