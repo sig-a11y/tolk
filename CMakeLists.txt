@@ -47,24 +47,25 @@ if (TOLK_WITH_JAVAJNI)
   endif(Java_FOUND)
 endif(TOLK_WITH_JAVAJNI)
 
-# Enable .NET support if available (Windows only)
+option(TOLK_WITH_DOENET "Build Tolk with .NET wrapper" OFF)
+# Need rc.exe and csc.exe to build .NET wrapper
 find_program(RC_EXECUTABLE rc)
-if(RC_EXECUTABLE)
-  find_program(DOTNET_EXECUTABLE dotnet)
+if(TOLK_WITH_DOENET AND RC_EXECUTABLE)
   find_program(CSC_EXECUTABLE csc)
-  if(DOTNET_EXECUTABLE OR CSC_EXECUTABLE)
-    option(BUILD_DOTNET "Build .NET wrapper" ON)
-    message(STATUS "Will Build .NET wrapper: TolkDotNet.dll")
-  else()
-    option(BUILD_DOTNET "Build .NET wrapper" OFF)
-    message(WARNING "Neither dotnet nor csc found. .NET wrapper will not be built.")
-  endif()
-  if(BUILD_DOTNET)
+  if(CSC_EXECUTABLE)
     add_subdirectory(src/dotnet)
-  endif()
+    message(STATUS "Will Build .NET wrapper: TolkDotNet.dll")
+
+    # Build C# examples if requested
+    if (BUILD_EXAMPLES)
+      add_subdirectory("examples/c#")
+    endif()
+  else()
+    message(WARNING "csc NOT found. .NET wrapper will not be built.")
+  endif(CSC_EXECUTABLE)
 else()
   message(STATUS ".NET wrapper need rc.exe which is only supported on Windows. Skipping .NET build.")
-endif()
+endif(TOLK_WITH_DOENET AND RC_EXECUTABLE)
 
 add_library(Tolk SHARED src/Tolk.cpp src/Tolk.h src/TolkVersion.h src/TolkJNI.cpp
   src/ScreenReaderDriver.h src/Tolk.rc
