@@ -45,14 +45,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-2022
-            platform: x64
+          - platform: x64
             config: Release
-          - os: windows-2022
-            platform: Win32
+          - platform: Win32
             config: Release
 
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-2022
     name: ${{ matrix.platform }}-${{ matrix.config }}
     steps:
     - uses: actions/checkout@v4
@@ -65,16 +63,14 @@ jobs:
       run: |
         echo "JOB_NAME=${{ env.JOB_NAME }}"
 
-    - name: Generate CMake Projects
-      run: |
-        cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
+    - name: Generate
+      run: cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
+    - name: Build
+      run: cmake --build build --config ${{ matrix.config }}
+    - name: Install
+      run: cmake --install build --config ${{ matrix.config }}
 
-    - name: Build CMake Projects
-      run: cmake --build build --config Release
-    - name: Install CMake Projects
-      run: cmake --install build --config Release
-
-    - name: Archive Release
+    - name: Archive
       uses: thedoctor0/zip-release@0.7.6
       with:
         type: 'zip'
