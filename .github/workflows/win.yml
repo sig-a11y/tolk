@@ -24,13 +24,9 @@ jobs:
       matrix:
         include:
           - platform: x64
-            config: Release
-          # - platform: x64
-          #   config: Debug
-          # - platform: x64
-          #   config: RelWithDebugInfo
+            config: RelWithDebInfo
           - platform: Win32
-            config: Release
+            config: RelWithDebInfo
 
     runs-on: windows-2022
     name: ${{ matrix.platform }}-${{ matrix.config }}
