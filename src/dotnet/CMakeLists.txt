@@ -5,10 +5,6 @@ find_program(DOTNET_EXECUTABLE dotnet)
 find_program(CSC_EXECUTABLE csc)
 find_program(RC_EXECUTABLE rc)
 
-if(NOT RC_EXECUTABLE)
-    message(FATAL_ERROR "Resource compiler (rc.exe) not found. Make sure Visual Studio is properly installed.")
-endif()
-
 # Resource file compilation
 set(RC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/TolkDotNet.rc)
 set(RC_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/TolkDotNet.res)
