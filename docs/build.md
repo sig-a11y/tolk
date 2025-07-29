@@ -30,7 +30,7 @@ cmake --build build32 --config RelWithDebInfo
 cmake --install build32 --config RelWithDebInfo --prefix tolk-RelWithDebInfo-Win32
 ```
 
-See [workflows](.github/workflows) dir for more examples.
+See [workflows](https://github.com/sig-a11y/tolk/tree/main/.github/workflows) dir for more examples.
 
 ## (Old) Build with Makefile
 
