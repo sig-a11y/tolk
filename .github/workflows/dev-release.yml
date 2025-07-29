@@ -81,7 +81,7 @@ jobs:
         Get-Command rc.exe | Format-Table -AutoSize
 
         # Generate
-        cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
+        cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install -DBUILD_EXAMPLES=ON -DTOLK_WITH_JAVAJNI=ON
     - name: Build
       run: cmake --build build --config ${{ matrix.config }}
     - name: Install
