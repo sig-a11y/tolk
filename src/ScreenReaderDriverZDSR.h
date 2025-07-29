@@ -19,7 +19,7 @@ public:
 
 public:
   bool Speak(const wchar_t *str, bool interrupt);
-  bool Braille(const wchar_t *) { return false; }
+  bool Braille(const wchar_t *);
   bool IsSpeaking();
   bool Silence();
   bool IsActive();
