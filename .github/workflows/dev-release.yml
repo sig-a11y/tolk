@@ -59,7 +59,8 @@ jobs:
 
     - name: Set Environment Variable
       run: |
-        echo "JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}" >> $GITHUB_ENV
+        chcp 65001 #set code page to utf-8
+        echo ("JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}") >> $env:GITHUB_ENV
     - name: Echo Env
       run: |
         echo "JOB_NAME=${{ env.JOB_NAME }}"
