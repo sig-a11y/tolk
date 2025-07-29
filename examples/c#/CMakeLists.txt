@@ -1,11 +1,10 @@
 # Tolk C# Example Application
 
 # Find .NET compiler
-find_program(DOTNET_EXECUTABLE dotnet)
 find_program(CSC_EXECUTABLE csc)
 
-if(NOT (DOTNET_EXECUTABLE OR CSC_EXECUTABLE))
-    message(FATAL_ERROR "Neither dotnet nor csc found. Cannot build C# example.")
+if(NOT (CSC_EXECUTABLE))
+    message(FATAL_ERROR "csc not found. Cannot build C# example.")
 endif()
 
 # Set directories
@@ -36,22 +35,8 @@ if(CSC_EXECUTABLE)
         COMMENT "Building C# example with csc"
         VERBATIM
     )
-elseif(DOTNET_EXECUTABLE)
-    # Use modern dotnet CLI (requires creating a .csproj file)
-    configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/ExampleAppCSharp.csproj.in
-        ${CMAKE_CURRENT_BINARY_DIR}/ExampleAppCSharp.csproj
-        @ONLY
-    )
-    
-    add_custom_command(
-        OUTPUT ${EXAMPLE_EXE}
-        COMMAND ${DOTNET_EXECUTABLE} build ${CMAKE_CURRENT_BINARY_DIR}/ExampleAppCSharp.csproj 
-                -o ${EXAMPLE_OUTPUT_DIR} -c Release
-        DEPENDS ${CSHARP_SOURCES} ${TOLKDOTNET_DLL}
-        COMMENT "Building C# example with dotnet CLI"
-        VERBATIM
-    )
+else()
+    # dotnet CLI
 endif()
 
 # Create custom target
