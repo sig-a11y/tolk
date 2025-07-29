@@ -16,6 +16,14 @@ using System;
 using DavyKager;
 
 public class ConsoleApp {
+  public static void OutputTest(String text) {
+    if (Tolk.Output(text)) {
+      Console.WriteLine($"TEST: Tolk.output(\"{text}\")");
+    } else {
+      Console.WriteLine($"Failed to output text: '{text}'");
+    }
+  }
+
   public static void Main() {
     Console.WriteLine("Tolk -- C# Console App Example");
 
@@ -23,6 +31,7 @@ public class ConsoleApp {
     Tolk.Load();
 
     Console.WriteLine("Querying for the active screen reader driver...");
+    Tolk.TrySAPI(true);
     string name = Tolk.DetectScreenReader();
     if (name != null) {
       Console.WriteLine("The active screen reader driver is: {0}", name);
@@ -39,9 +48,8 @@ public class ConsoleApp {
     }
 
     Console.WriteLine("Let's output some text...");
-    if (!Tolk.Output("Hello, World!")) {
-      Console.WriteLine("Failed to output text");
-    }
+    OutputTest("This is ExampleCSharpApp with TolkDotNet.dll");
+    OutputTest("Hello, World!");
 
     Console.WriteLine("Finalizing Tolk...");
     Tolk.Unload();

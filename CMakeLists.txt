@@ -61,6 +61,11 @@ if(RC_EXECUTABLE)
   endif()
   if(BUILD_DOTNET)
     add_subdirectory(src/dotnet)
+    
+    # Build C# examples if requested
+    if (BUILD_EXAMPLES)
+      add_subdirectory("examples/c#")
+    endif()
   endif()
 else()
   message(STATUS ".NET wrapper need rc.exe which is only supported on Windows. Skipping .NET build.")
