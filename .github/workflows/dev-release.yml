@@ -54,9 +54,19 @@ jobs:
     name: ${{ matrix.platform }}-${{ matrix.config }}
     steps:
     - uses: actions/checkout@v4
-    - name: Find RC.exe
-      # https://github.com/actions/runner-images/issues/294#issuecomment-588090582
+
+    - name: Set Environment Variable
       run: |
+        chcp 65001 #set code page to utf-8
+        echo ("JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}") >> $env:GITHUB_ENV
+    - name: Echo Env
+      run: |
+        echo "JOB_NAME=${{ env.JOB_NAME }}"
+
+    - name: Generate
+      run: |
+        # Setup VS Dev Environment to Find rc.exe
+        #   https://github.com/actions/runner-images/issues/294#issuecomment-588090582
         function Invoke-VSDevEnvironment {
           $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
           $installationPath = & $vswhere -prerelease -legacy -latest -property installationPath
@@ -70,16 +80,8 @@ jobs:
         Invoke-VSDevEnvironment
         Get-Command rc.exe | Format-Table -AutoSize
 
-    - name: Set Environment Variable
-      run: |
-        chcp 65001 #set code page to utf-8
-        echo ("JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}") >> $env:GITHUB_ENV
-    - name: Echo Env
-      run: |
-        echo "JOB_NAME=${{ env.JOB_NAME }}"
-
-    - name: Generate
-      run: cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
+        # Generate
+        cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
     - name: Build
       run: cmake --build build --config ${{ matrix.config }}
     - name: Install
