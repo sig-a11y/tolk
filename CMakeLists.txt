@@ -28,8 +28,27 @@ if (TOLK_WITH_JAVAJNI)
     list (APPEND TOLK_COMPILE_FLAGS -D_WITH_JNI)
     list (APPEND TOLK_LINK_FLAGS ${JNI_LIBRARIES})
   else()
-    message("Cannot find Java JDK. Specify JAVA_HOME environment variable to help CMake find Java JDK")
+    message(WARNING "Cannot find Java JDK. Specify JAVA_HOME environment variable to help CMake find Java JDK")
   endif()
+endif()
+
+# Enable .NET support if available (Windows only)
+find_program(RC_EXECUTABLE rc)
+if(RC_EXECUTABLE)
+  find_program(DOTNET_EXECUTABLE dotnet)
+  find_program(CSC_EXECUTABLE csc)
+  if(DOTNET_EXECUTABLE OR CSC_EXECUTABLE)
+    option(BUILD_DOTNET "Build .NET wrapper" ON)
+    message(STATUS "Will Build .NET wrapper: TolkDotNet.dll")
+  else()
+    option(BUILD_DOTNET "Build .NET wrapper" OFF)
+    message(WARNING "Neither dotnet nor csc found. .NET wrapper will not be built.")
+  endif()
+  if(BUILD_DOTNET)
+    add_subdirectory(src/dotnet)
+  endif()
+else()
+  message(STATUS ".NET wrapper need rc.exe which is only supported on Windows. Skipping .NET build.")
 endif()
 
 add_library(Tolk SHARED src/Tolk.cpp src/Tolk.h src/TolkVersion.h src/TolkJNI.cpp
@@ -59,6 +78,8 @@ install (FILES docs/README.md DESTINATION docs)
 install (FILES LICENSE.txt LICENSE-NVDA.txt DESTINATION license)
 # add Binay DLL
 install (TARGETS Tolk DESTINATION lib)
+# Install PDB files for Debug builds
+install (FILES Tolk.pdb DESTINATION lib OPTIONAL)
 # add header file
 install (FILES src/Tolk.h DESTINATION include)
 # add Client libraries
