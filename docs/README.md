@@ -1,15 +1,23 @@
 # Tolk: Screen Reader Abstraction Library
 
-[![Windows](https://github.com/game-a11y/tolk/actions/workflows/cmake.yml/badge.svg)](https://github.com/game-a11y/tolk/actions/workflows/cmake.yml)
+[![Dev Release](https://github.com/sig-a11y/tolk/actions/workflows/dev-release.yml/badge.svg)](https://github.com/sig-a11y/tolk/actions/workflows/dev-release.yml)
 
 * Project page: `https://davykager.com/projects/tolk/` (This URL is broken!) [[web.archive]](https://web.archive.org/web/20190824230209/http://davykager.com/projects/tolk/)
 
+## Download
+
+* Latest Dev Build (main branch): [Release #dev-latest](https://github.com/sig-a11y/tolk/releases/tag/dev-latest)
+  * With wrappers: DotNet/C# (`TolkDotNet.dll`), Java (`Tolk.jar`)
+  * With examples
+* Stable Release: TODO
+* OLD Upstream [dkager/tolk](https://github.com/dkager/tolk) build  (master branch): [Release Tolk v1.0.0+20240609](https://github.com/sig-a11y/tolk/releases/tag/v1.0.0%2B20240609)
+  * `Told.dll` only, without examples or wrappers
 
 ## Related project
 
-- [C++, Windows-Only] [qtnc/UniversalSpeech](https://github.com/qtnc/UniversalSpeech)  
+* [C++, Windows-Only] [qtnc/UniversalSpeech](https://github.com/qtnc/UniversalSpeech)  
     UniversalSpeech library: make popular screen readers speak in your application
-- [Rust, Cross-platforms] [AccessKit/accesskit](https://github.com/AccessKit/accesskit)  
+* [Rust, Cross-platforms] [AccessKit/accesskit](https://github.com/AccessKit/accesskit)  
     UI accessibility infrastructure across platforms and programming languages
 
 ## Introduction
