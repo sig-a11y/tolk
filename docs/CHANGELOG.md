@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - SR: Add ZDSR API Support (#1)
+- SR: Add BoyPCReader Support (#17)
 - build,ci: CMake Support, CI Maintenance
   - cmake,ci: Build with CMake and setup Github Action CI (dkager/tolk#19)
   - cmake: Fix cross compiling with mingw on Linux (#2)
