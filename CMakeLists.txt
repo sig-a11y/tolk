@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(Tolk)
 
 option (TOLK_MULTITHREADED "Build Multi-Threaded (/MT) instead of Multi-Threaded DLL (/MD)" OFF)
+option (BUILD_EXAMPLES "Build example applications" OFF)
 
 if (TOLK_MULTITHREADED)
   foreach (flag_var
@@ -20,7 +21,6 @@ set (TOLK_LINK_FLAGS user32 ole32 oleaut32 sapi)
 
 # Find Java JDK so we can enable JNI support
 option (TOLK_WITH_JAVAJNI "Build Tolk with Java support" OFF)
-
 if (TOLK_WITH_JAVAJNI)
   find_package(JNI)
   find_package(Java COMPONENTS Development Runtime)
@@ -30,11 +30,15 @@ if (TOLK_WITH_JAVAJNI)
     include_directories (${JNI_INCLUDE_DIRS})
     list (APPEND TOLK_COMPILE_FLAGS -D_WITH_JNI)
     list (APPEND TOLK_LINK_FLAGS ${JNI_LIBRARIES})
-    
+
     # Build Java JAR
     add_subdirectory(src/java)
-    
     message(STATUS "Java JNI support enabled and JAR will be built")
+
+    # Build Java examples if requested
+    if (BUILD_EXAMPLES)
+      add_subdirectory(examples/java)
+    endif()
   else()
     # Provide specific warnings for missing dependencies
     if (NOT JNI_FOUND)

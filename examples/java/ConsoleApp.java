@@ -25,6 +25,7 @@ public class ConsoleApp {
     Tolk.load();
 
     System.out.println("Querying for the active screen reader driver...");
+    Tolk.trySAPI(true);
     final String name = Tolk.detectScreenReader();
     if (name != null) {
       System.out.println("The active screen reader driver is: " + name);
