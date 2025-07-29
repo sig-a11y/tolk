@@ -69,6 +69,7 @@ endif(TOLK_WITH_DOENET AND RC_EXECUTABLE)
 
 add_library(Tolk SHARED src/Tolk.cpp src/Tolk.h src/TolkVersion.h src/TolkJNI.cpp
   src/ScreenReaderDriver.h src/Tolk.rc
+  src/ScreenReaderDriverBOY.cpp src/ScreenReaderDriverBOY.h
   src/ScreenReaderDriverJAWS.cpp src/ScreenReaderDriverJAWS.h
   src/ScreenReaderDriverNVDA.cpp src/ScreenReaderDriverNVDA.h
   src/ScreenReaderDriverSA.cpp src/ScreenReaderDriverSA.h
@@ -101,8 +102,10 @@ install (FILES src/Tolk.h DESTINATION include)
 # add Client libraries
 if (${CMAKE_GENERATOR_PLATFORM} MATCHES "x64")
   install (FILES libs/x64/nvdaControllerClient64.dll libs/x64/SAAPI64.dll DESTINATION lib)
+  install (FILES libs/x64/BoyCtrl-x64.dll DESTINATION lib)
   install (FILES libs/x64/ZDSRAPI_x64.dll libs/x64/ZDSRAPI.ini DESTINATION lib)
 else()
   install (FILES libs/x86/dolapi32.dll libs/x86/nvdaControllerClient32.dll libs/x86/SAAPI32.dll DESTINATION lib)
+  install (FILES libs/x64/BoyCtrl.dll DESTINATION lib)
   install (FILES libs/x86/ZDSRAPI.dll libs/x64/ZDSRAPI.ini DESTINATION lib)
 endif()
