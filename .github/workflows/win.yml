@@ -1,0 +1,64 @@
+name: Win
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # dirs
+      - '.github/**/*.yml'
+      - 'CMake/*.cmake'
+      # TODO: set ci for those
+      # - 'contrib/**'
+      - 'libs/**/*.dll'
+      - 'src/**'
+      # top-level files
+      - 'CMakeLists.txt'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  msvc:
+    strategy:
+      matrix:
+        include:
+          - platform: x64
+            config: RelWithDebInfo
+          - platform: Win32
+            config: RelWithDebInfo
+
+    runs-on: windows-2022
+    name: ${{ matrix.platform }}-${{ matrix.config }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Generate
+      run: |
+        # Setup VS Dev Environment to Find rc.exe
+        #   https://github.com/actions/runner-images/issues/294#issuecomment-588090582
+        function Invoke-VSDevEnvironment {
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installationPath = & $vswhere -prerelease -legacy -latest -property installationPath
+          $Command = Join-Path $installationPath "Common7\Tools\vsdevcmd.bat"
+          & "${env:COMSPEC}" /s /c "`"$Command`" -no_logo && set" | Foreach-Object {
+            if ($_ -match '^([^=]+)=(.*)') {
+              [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+            }
+          }
+        }
+        Invoke-VSDevEnvironment
+        Get-Command rc.exe | Format-Table -AutoSize
+
+        # Generate
+        cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install `
+          -DBUILD_EXAMPLES=ON -DTOLK_WITH_DOENET=ON -DTOLK_WITH_JAVAJNI=ON
+    - name: Build
+      run: cmake --build build --config ${{ matrix.config }}
+    - name: Install
+      run: cmake --install build --config ${{ matrix.config }}
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: tolk-${{ matrix.platform }}-${{ matrix.config }}-DEV
+        path: install/

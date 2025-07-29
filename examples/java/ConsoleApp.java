@@ -16,6 +16,14 @@
 import com.davykager.tolk.Tolk;
 
 public class ConsoleApp {
+  public static void outputTest(String text) {
+    if (Tolk.output(text)) {
+      System.out.println("TEST: Tolk.output(\"" + text + "\")");
+    } else {
+      System.out.println("Failed to output text: '" + text + "'");
+    }
+  }
+
   public static void main(String[] args) {
     System.out.println("Tolk -- Java Console App Example");
 
@@ -25,6 +33,7 @@ public class ConsoleApp {
     Tolk.load();
 
     System.out.println("Querying for the active screen reader driver...");
+    Tolk.trySAPI(true);
     final String name = Tolk.detectScreenReader();
     if (name != null) {
       System.out.println("The active screen reader driver is: " + name);
@@ -41,9 +50,8 @@ public class ConsoleApp {
     }
 
     System.out.println("Let's output some text...");
-    if (!Tolk.output("Hello, World!")) {
-      System.out.println("Failed to output text");
-    }
+    outputTest("This is ExampleAppJava.jar with Tolk.jar");
+    outputTest("Hello, World!");
 
     System.out.println("Finalizing Tolk...");
     // Tolk will also try to uninitialize COM

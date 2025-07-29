@@ -1,3 +1,5 @@
+dist/
+
 *.obj
 *.res
 *.exe
@@ -9,3 +11,8 @@
 *.pyo
 *.html
 *.zip
+RC*
+build/
+build*/
+install/
+tolk-*/

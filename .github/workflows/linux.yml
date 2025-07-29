@@ -1,0 +1,51 @@
+name: Linux Cross
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # dirs
+      - '.github/**/*.yml'
+      - 'CMake/*.cmake'
+      # TODO: set ci for those
+      # - 'contrib/**'
+      - 'libs/**/*.dll'
+      - 'src/**'
+      # top-level files
+      - 'CMakeLists.txt'
+      - 'Makefile'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  msvc:
+    strategy:
+      matrix:
+        include:
+          - name: Mingw64
+            vmimage: ubuntu-latest
+
+    runs-on: ${{ matrix.vmimage }}
+    name: ${{ matrix.name }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+
+    - name: Generate CMake Projects
+      run: |
+        cmake -S . -B build -DCMAKE_INSTALL_PREFIX=install -DCMAKE_TOOLCHAIN_FILE=../CMake/mingwcc64.toolchain.cmake
+
+    - name: Build CMake Projects
+      run: cmake --build build
+
+    - name: Install CMake Projects
+      run: cmake --install build
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: tolk-${{ matrix.name }}
+        path: install

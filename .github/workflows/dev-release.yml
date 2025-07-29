@@ -1,0 +1,104 @@
+name: Dev Release
+# Upload latest dev build artifact, only run on main branch
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # dirs
+      - '.github/**/*.yml'
+      - 'CMake/*.cmake'
+      # TODO: set ci for those
+      # - 'contrib/**'
+      - 'libs/**/*.dll'
+      - 'src/**'
+      # top-level files
+      - 'CMakeLists.txt'
+  # NOTE: For DEBUG Only!!!
+  # pull_request:
+  #   branches:
+  #     - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: experimental-release
+  cancel-in-progress: true
+
+jobs:
+  delete-assets:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+    - name: Delete old Dev Release assets
+      uses: mknejp/delete-release-assets@v1
+      with:
+        token: ${{ github.token }}
+        tag: dev-latest
+        assets: '*'
+
+  make-release:
+    needs: delete-assets
+    permissions: write-all
+    strategy:
+      matrix:
+        include:
+          - platform: x64
+            config: RelWithDebInfo
+          - platform: Win32
+            config: RelWithDebInfo
+
+    runs-on: windows-2022
+    name: ${{ matrix.platform }}-${{ matrix.config }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set Environment Variable
+      run: |
+        chcp 65001 #set code page to utf-8
+        echo ("JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}") >> $env:GITHUB_ENV
+    - name: Echo Env
+      run: |
+        echo "JOB_NAME=${{ env.JOB_NAME }}"
+
+    - name: Generate
+      run: |
+        # Setup VS Dev Environment to Find rc.exe
+        #   https://github.com/actions/runner-images/issues/294#issuecomment-588090582
+        function Invoke-VSDevEnvironment {
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installationPath = & $vswhere -prerelease -legacy -latest -property installationPath
+          $Command = Join-Path $installationPath "Common7\Tools\vsdevcmd.bat"
+          & "${env:COMSPEC}" /s /c "`"$Command`" -no_logo && set" | Foreach-Object {
+            if ($_ -match '^([^=]+)=(.*)') {
+              [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+            }
+          }
+        }
+        Invoke-VSDevEnvironment
+        Get-Command rc.exe | Format-Table -AutoSize
+
+        # Generate
+        cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install `
+          -DBUILD_EXAMPLES=ON -DTOLK_WITH_DOENET=ON -DTOLK_WITH_JAVAJNI=ON
+    - name: Build
+      run: cmake --build build --config ${{ matrix.config }}
+    - name: Install
+      run: cmake --install build --config ${{ matrix.config }}
+
+    - name: Archive
+      uses: thedoctor0/zip-release@0.7.6
+      with:
+        type: 'zip'
+        filename: 'tolk-${{ env.JOB_NAME }}-DEV.zip'
+        path: 'install/*'
+
+    - name: Upload Dev Release
+      uses: softprops/action-gh-release@v2
+      with:
+        prerelease: true
+        tag_name: dev-latest
+        files: |
+          tolk-${{ env.JOB_NAME }}-DEV.zip
