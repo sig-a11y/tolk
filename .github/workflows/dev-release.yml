@@ -28,7 +28,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  delete-assets:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+    - name: Delete old Dev Release assets
+      uses: mknejp/delete-release-assets@v1
+      with:
+        token: ${{ github.token }}
+        tag: dev-latest
+        assets: '*'
+
   make-release:
+    needs: delete-assets
     permissions: write-all
     strategy:
       matrix:
@@ -48,7 +60,6 @@ jobs:
     - name: Set Environment Variable
       run: |
         echo "JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}" >> $GITHUB_ENV
-        echo "GIT_HASH=$(git rev-parse --short '$GITHUB_SHA')" >> $GITHUB_ENV
 
     - name: Generate CMake Projects
       run: |
@@ -58,8 +69,6 @@ jobs:
       run: cmake --build build --config Release
     - name: Install CMake Projects
       run: cmake --install build --config Release
-    - name: Add git hash
-      run: echo "" >> install/git-hash+${{ env.GIT_HASH }}.txt
 
     - name: Archive Release
       uses: thedoctor0/zip-release@0.7.6
@@ -67,13 +76,6 @@ jobs:
         type: 'zip'
         filename: 'tolk-${{ env.JOB_NAME }}-DEV.zip'
         path: 'install/*'
-
-    - name: Delete old Dev Release assets
-      uses: mknejp/delete-release-assets@v1
-      with:
-        token: ${{ github.token }}
-        tag: dev-latest
-        assets: '*'
 
     - name: Upload Dev Release
       uses: softprops/action-gh-release@v2
