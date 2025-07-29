@@ -13,4 +13,6 @@ dist/
 *.zip
 RC*
 build/
+build*/
 install/
+tolk-*/
