@@ -1,30 +1,6 @@
 # Tolk: Screen Reader Abstraction Library
 
-[![Dev Release](https://github.com/sig-a11y/tolk/actions/workflows/dev-release.yml/badge.svg)](https://github.com/sig-a11y/tolk/actions/workflows/dev-release.yml)
-
-* Project page: `https://davykager.com/projects/tolk/` (This URL is broken!) [[web.archive]](https://web.archive.org/web/20190824230209/http://davykager.com/projects/tolk/)
-
-## Download
-
-* Latest Dev Build (main branch): [Release #dev-latest](https://github.com/sig-a11y/tolk/releases/tag/dev-latest)
-  * With wrappers: DotNet/C# (`TolkDotNet.dll`), Java (`Tolk.jar`)
-  * With examples
-* Stable Release: TODO
-* OLD Upstream [dkager/tolk](https://github.com/dkager/tolk) build  (master branch): [Release Tolk v1.0.0+20240609](https://github.com/sig-a11y/tolk/releases/tag/v1.0.0%2B20240609)
-  * `Told.dll` only, without examples or wrappers
-
-## Build
-
-See [build.md](build.md)
-
-## Related project
-
-* [C++, Windows-Only] [qtnc/UniversalSpeech](https://github.com/qtnc/UniversalSpeech)  
-    UniversalSpeech library: make popular screen readers speak in your application
-* [Rust, Cross-platforms] [AccessKit/accesskit](https://github.com/AccessKit/accesskit)  
-    UI accessibility infrastructure across platforms and programming languages
-
-----
+NOTE: this project is not currently being developed.
 
 ## Introduction
 
@@ -38,6 +14,11 @@ There are APIs for the following languages:
 * Python
 * AutoIt
 * PureBasic
+
+## License
+
+Tolk is distributed under the GNU Lesser General Public License version 3 (LGPLv3).
+Client libraries and headers are distributed under their own license.
 
 ## Design
 
@@ -104,7 +85,6 @@ The following table lists the supported screen readers in the order in which the
     JAWS            Yes      Yes       No       Yes   Yes
     Window-Eyes     Yes      Yes       No       Yes   Yes
     NVDA            Yes      Yes       No       Yes   Yes
-    ZDSR            Yes      No        YES      Yes   Yes
     SuperNova       Yes      No        No       Yes   No
     System Access   Yes      Yes       No       Yes   Yes
     ZoomText        Yes      No        Yes      Yes   Yes
@@ -119,16 +99,20 @@ The following table lists the supported screen readers in the order in which the
 * The driver for Microsoft SAPI explicitly disables XML handling because there is no way to be sure SAPI is being used and other drivers don't support this.
 * Window-Eyes is obsolete, but support has not yet been removed.
 
-## License
+## Compiling
 
-Tolk is distributed under the GNU Lesser General Public License version 3 ([LGPLv3](LICENSE.txt)).  
-Client libraries and headers are distributed under their own license.
+If you want to compile Tolk yourself, here's what you need to build the whole thing:
 
-* NVDA: [LGPL-2.1](LICENSE-NVDA.txt)
+* Microsoft Visual C++
+* Windows Software Development Kit (SDK)
+* Java Development Kit (JDK)
+* Microsoft .NET Framework
+* Python
+* Pandoc
 
-### Contributors
+The root directory and `examples` directories contain various batch files as a starting point. They assume the required tools are in your `PATH` and that the JDK include directory is in `INCLUDE`. For the examples you will also need to copy over any dependency files.
 
-[Contributors to sig-a11y/tolk](https://github.com/sig-a11y/tolk/graphs/contributors)
+## Contributors
 
 * Davy Kager
 * Leonard de Ruijter
