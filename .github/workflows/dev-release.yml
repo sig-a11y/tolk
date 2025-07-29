@@ -45,23 +45,27 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set Environment Variable
+      run: |
+        echo "JOB_NAME=${{ matrix.platform }}-${{ matrix.config }}" >> $GITHUB_ENV
+        echo "GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+
     - name: Generate CMake Projects
       run: |
         cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
 
     - name: Build CMake Projects
       run: cmake --build build --config Release
-
     - name: Install CMake Projects
       run: cmake --install build --config Release
+    - name: Add git hash
+      run: echo "" >> install/git-hash+${{ env.GIT_HASH }}.txt
 
-    - name: Zip the Build
-      run: zip -r tolk-${{ matrix.name }}-DEV  install/ 
     - name: Archive Release
       uses: thedoctor0/zip-release@0.7.6
       with:
         type: 'zip'
-        filename: 'tolk-${{ matrix.name }}-DEV.zip'
+        filename: 'tolk-${{ env.JOB_NAME }}-DEV.zip'
         path: 'install/*'
 
     - name: Delete old Dev Release assets
@@ -77,4 +81,4 @@ jobs:
         prerelease: true
         tag_name: dev-latest
         files: |
-          tolk-${{ matrix.name }}-DEV.zip
+          tolk-${{ env.JOB_NAME }}-DEV.zip
