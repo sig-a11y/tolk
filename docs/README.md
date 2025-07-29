@@ -13,12 +13,18 @@
 * OLD Upstream [dkager/tolk](https://github.com/dkager/tolk) build  (master branch): [Release Tolk v1.0.0+20240609](https://github.com/sig-a11y/tolk/releases/tag/v1.0.0%2B20240609)
   * `Told.dll` only, without examples or wrappers
 
+## Build
+
+See [build.md](build.md)
+
 ## Related project
 
 * [C++, Windows-Only] [qtnc/UniversalSpeech](https://github.com/qtnc/UniversalSpeech)  
     UniversalSpeech library: make popular screen readers speak in your application
 * [Rust, Cross-platforms] [AccessKit/accesskit](https://github.com/AccessKit/accesskit)  
     UI accessibility infrastructure across platforms and programming languages
+
+----
 
 ## Introduction
 
@@ -50,62 +56,6 @@ Finally, a few words on multi-threaded applications. Tolk is not thread-safe. Al
 2. Initialize and uninitialize COM yourself and call `Tolk_Load` only once in your application. You still need a matching call to `Tolk_Unload`. This is also what you should do in languages that automatically deal with COM, e.g. .NET.
 
 ## Usage
-
-### Generate the `.dll`
-
-1. Install the dependencies:
-
-    1.1 CLI dependencies to build the C++ `.dll`
-
-    ```bash
-    choco install jom pandoc 
-    ```
-
-    > **PS:** [jom](https://community.chocolatey.org/packages/jom#install) is a CLI alternative to `nmake.exe` that is installed with Visual Studio. This is great to avoid to add manually `nmake` to the environment PATH variable
-
-    1.2 Install Java JDK and configure `$JAVA_HOME` environment variable to point to their path
-
-
-2. Install [Visual Studio](https://visualstudio.microsoft.com) and the Workload: **C++ Desktop development**
-
-    Visual Studio is required to use the CLI tools such as: `rc`, `cl`. The IDE is required to use the **Developer Powershell for VS as well**. 
-    
-    Besides that, the Windows 10 SDK is required to use some `.dll's` that the CLI tools mentioned above requires.
-
-    2.1 Also, make sure that you installed the Windows 10 SDK (`10.0.19041.0`)
-
-    > **Warning:** For now, the version `10.0.2+` doesn't works to compile and generate the dll
-
-3. Put the path below into you PATH environment variable
-
-    This is required to use the `cl` C++ compiler and set some dependencies into the INCLUDE path: (e.g `windows.h`)
-
-    ```bash
-    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\[latest-version]\bin\Hostx86\arm64
-    ```
-4. Open the **Developer Powershell for VS [version]** CLI as a administrator user
-
-5. Go to the directory of this cloned repository, and run  [jom](https://community.chocolatey.org/packages/jom#install) (or `nmake.exe`, from Visual Studio folder) CLI to compiles the `.dll`
-
-    ```powershell
-    cd tolk
-    jom /f .\Makefile
-    ```
-
-    **Output**
-
-    ```powershell
-    jom x.x.x - empower your cores
-
-        cd tolk\src && C:\ProgramData\chocolatey\lib\jom\tools\jom.exe /
-        cd tolk\src\dotnet && C:\ProgramData\chocolatey\lib\jom\tools\jom.exe /
-        cd tolk\src\java && C:\ProgramData\chocolatey\lib\jom\tools\jom.exe /
-        cd tolk\docs && C:\ProgramData\chocolatey\lib\jom\tools\jom.exe /
-        pandoc -s --toc -M title="Tolk" -M author="Davy Kager" -r markdown -w html5 -o .\README.html README.md
-    ```
-6. Use the generated `src/Tolk.dll` lib together with any language wrapper that you wish (dotnet, java...)
-
-    This command above will run the all `Makefile` on this project. You should see the generated C++ dll into `src/Tolk.dll` and the language wrappers as well:  `src/dotnet/TolkDotNet.dll`, `src/java/Tolk.jar`...
 
 Tolk has functions for (un)initialization, querying and using the active screen reader, and for working with Microsoft SAPI. To use Tolk, import the appropriate version of `Tolk.dll` into your application. In C/C++ this is usually done by including `Tolk.h` and linking with the appropriate import library `Tolk.lib`. You could also use the Windows API functions `LoadLibrary` and `FreeLibrary`. Other languages are also supported, see `Wrappers`. If you're working in an unsupported language, use its specific facilities to call into the DLL.
 
@@ -173,19 +123,6 @@ The following table lists the supported screen readers in the order in which the
 * Some screen readers (notably Window-Eyes and ZoomText) support many more functions, but there are no plans to implement any of them.
 * The driver for Microsoft SAPI explicitly disables XML handling because there is no way to be sure SAPI is being used and other drivers don't support this.
 * Window-Eyes is obsolete, but support has not yet been removed.
-
-## Compiling
-
-If you want to compile Tolk yourself, here's what you need to build the whole thing:
-
-* Microsoft Visual C++
-* Windows Software Development Kit (SDK)
-* Java Development Kit (JDK)
-* Microsoft .NET Framework
-* Python
-* Pandoc
-
-The root directory and `examples` directories contain various batch files as a starting point. They assume the required tools are in your `PATH` and that the JDK include directory is in `INCLUDE`. For the examples you will also need to copy over any dependency files.
 
 ## Contributors
 
