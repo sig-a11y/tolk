@@ -36,6 +36,21 @@ jobs:
     name: ${{ matrix.platform }}-${{ matrix.config }}
     steps:
     - uses: actions/checkout@v4
+    - name: Find RC.exe
+      # https://github.com/actions/runner-images/issues/294#issuecomment-588090582
+      run: |
+        function Invoke-VSDevEnvironment {
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installationPath = & $vswhere -prerelease -legacy -latest -property installationPath
+          $Command = Join-Path $installationPath "Common7\Tools\vsdevcmd.bat"
+          & "${env:COMSPEC}" /s /c "`"$Command`" -no_logo && set" | Foreach-Object {
+            if ($_ -match '^([^=]+)=(.*)') {
+              [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+            }
+          }
+        }
+        Invoke-VSDevEnvironment
+        Get-Command rc.exe | Format-Table -AutoSize
 
     - name: Generate
       run: cmake -S . -B build -A ${{ matrix.platform }} -DCMAKE_INSTALL_PREFIX=install
