@@ -23,15 +23,18 @@ set (TOLK_LINK_FLAGS user32 ole32 oleaut32 sapi)
 option (TOLK_WITH_JAVAJNI "Build Tolk with Java support" OFF)
 if (TOLK_WITH_JAVAJNI)
   find_package(JNI)
-  find_package(Java COMPONENTS Development Runtime)
-
-  if (JNI_FOUND AND Java_FOUND)
+  if (JNI_FOUND)
     # Enable JNI support in C++ code
     include_directories (${JNI_INCLUDE_DIRS})
     list (APPEND TOLK_COMPILE_FLAGS -D_WITH_JNI)
     list (APPEND TOLK_LINK_FLAGS ${JNI_LIBRARIES})
+  else()
+    message(WARNING "JNI not found. Specify JAVA_HOME environment variable to help CMake find Java JDK")
+  endif(JNI_FOUND)
 
-    # Build Java JAR
+  # Build Tolk.jar
+  find_package(Java COMPONENTS Development Runtime)
+  if (Java_FOUND)
     add_subdirectory(src/java)
     message(STATUS "Java JNI support enabled and JAR will be built")
 
@@ -40,16 +43,9 @@ if (TOLK_WITH_JAVAJNI)
       add_subdirectory(examples/java)
     endif()
   else()
-    # Provide specific warnings for missing dependencies
-    if (NOT JNI_FOUND)
-      message(WARNING "JNI not found. Specify JAVA_HOME environment variable to help CMake find Java JDK")
-    endif()
-    if (NOT Java_FOUND)
-      message(WARNING "Java compiler not found. Make sure Java Development Kit (JDK) is installed")
-    endif()
-    message(WARNING "Java support disabled due to missing dependencies")
-  endif()
-endif()
+    message(WARNING "Java compiler not found. Make sure Java Development Kit (JDK) is installed")
+  endif(Java_FOUND)
+endif(TOLK_WITH_JAVAJNI)
 
 # Enable .NET support if available (Windows only)
 find_program(RC_EXECUTABLE rc)
